@@ -47,7 +47,7 @@ public class AuthServiceImpl implements AuthService {
         String normalizedName = name.trim();
 
         if (userRepository.existsByEmail(normalizedEmail)) {
-            throw new IllegalArgumentException(
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "An account with this email already exists");
         }
 
@@ -98,7 +98,7 @@ public class AuthServiceImpl implements AuthService {
 
         User user = userRepository.findByEmail(normalizedEmail)
                 .orElseThrow(() ->
-                        new IllegalArgumentException("Invalid email or OTP"));
+                        new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid email or OTP"));
 
         if (user.isVerified()) {
             throw new IllegalArgumentException(
@@ -120,18 +120,18 @@ public class AuthServiceImpl implements AuthService {
 
         User user = userRepository.findByEmail(normalizedEmail)
                 .orElseThrow(() ->
-                        new IllegalArgumentException(
+                        new ResponseStatusException(HttpStatus.NOT_FOUND,
                                 "Invalid email or password"));
 
         if (!user.isVerified()) {
-            throw new IllegalArgumentException(
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
                     "Please verify your email before logging in");
         }
 
         if (!passwordEncoder.matches(
                 password, user.getPasswordHash())) {
 
-            throw new IllegalArgumentException(
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "Invalid email or password");
         }
 
