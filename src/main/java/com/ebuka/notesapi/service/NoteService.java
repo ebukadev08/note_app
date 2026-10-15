@@ -5,13 +5,15 @@ import com.ebuka.notesapi.model.Note;
 
 @Service
 public interface NoteService {
-    List<Note> getAllNotes();
 
-    Note createNote(Note note);
+    Note createNote(String title, String content, String email);
 
-    Note getNoteById(Long id);
+    List<Note> getMyNotes(String email);
 
-    Note updateNote(Long id, Note updatedNote);
-    void deleteNote(Long id);
+    Note getNoteById(Long id, String email);
+
+    Note updateNote(Long noteId, String email, String title, String content);
+
+    void deleteNote(Long NoteId, String email);
 
 }
