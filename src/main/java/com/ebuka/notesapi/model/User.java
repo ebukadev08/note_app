@@ -1,6 +1,5 @@
 package com.ebuka.notesapi.model;
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
@@ -21,13 +20,6 @@ public class User {
 
     @Column(nullable = false)
     private boolean verified = false;
-
-    private String otpHash;
-
-    private LocalDateTime otpExpiresAt;
-
-    @Column(nullable = false)
-    private int otpAttempts = 0;
 
     public User() {
     }
@@ -72,29 +64,5 @@ public class User {
 
     public void setVerified(boolean verified) {
         this.verified = verified;
-    }
-
-    public String getOtpHash() {
-        return otpHash;
-    }
-
-    public void setOtpHash(String otpHash) {
-        this.otpHash = otpHash;
-    }
-
-    public LocalDateTime getOtpExpiresAt() {
-        return otpExpiresAt;
-    }
-
-    public void setOtpExpiresAt(LocalDateTime otpExpiresAt) {
-        this.otpExpiresAt = otpExpiresAt;
-    }
-
-    public int getOtpAttempts() {
-        return otpAttempts;
-    }
-
-    public void setOtpAttempts(int otpAttempts) {
-        this.otpAttempts = otpAttempts;
     }
 }
