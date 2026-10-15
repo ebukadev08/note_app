@@ -1,8 +1,10 @@
 
 package com.ebuka.notesapi.controller;
 
+import com.ebuka.notesapi.dto.LoginRequest;
 import com.ebuka.notesapi.dto.ResendOtpRequest;
 import com.ebuka.notesapi.dto.SignupRequest;
+import com.ebuka.notesapi.dto.VerifyOtpRequest;
 import com.ebuka.notesapi.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -38,6 +40,7 @@ public class AuthController {
                         "Signup received. Check your email for the OTP."
                 ));
     }
+
     @PostMapping("/resend-otp")
     public ResponseEntity<Map<String, String>> resendOtp(
         @Valid @RequestBody ResendOtpRequest request) {
@@ -50,5 +53,36 @@ public class AuthController {
                 "If the account is eligible, an OTP request has been processed."
         )
         );
+}
+    @PostMapping("/verify-otp")
+     public ResponseEntity<Map<String, String>> verifyOtp(
+        @Valid @RequestBody VerifyOtpRequest request) {
+
+        authService.verifyOtp(
+                request.getEmail(),
+                request.getOtp()
+        );
+
+        return ResponseEntity.ok(
+                Map.of("message", "Account verified successfully.")
+        );
+        }
+
+    @PostMapping("/login")
+    public ResponseEntity<Map<String, String>> login(
+        @Valid @RequestBody LoginRequest request) {
+
+        authService.login(
+                request.getEmail(),
+                request.getPassword()
+        );
+        String token = authService.login(
+            request.getEmail(),
+            request.getPassword());
+
+        return ResponseEntity.ok(Map.of(
+                "message", "Login successful.",
+                "token", token
+        ));
         }
 }
