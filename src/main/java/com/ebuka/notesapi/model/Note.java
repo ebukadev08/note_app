@@ -1,9 +1,12 @@
 package com.ebuka.notesapi.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -11,7 +14,7 @@ import jakarta.validation.constraints.Size;
 public class Note {
     @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     
     @NotBlank (message = "Title is required")
     @Size(max = 100, message = "Title must not exceed 100 characters")
@@ -19,6 +22,10 @@ public class Note {
 
     @NotBlank(message = "Content is required")
     private String content;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     public Note(){
 
@@ -41,12 +48,20 @@ public class Note {
         return content;
     }
 
+     public User getUser(){
+        return user;
+    }
+
     public void setTitle(String title) {
         this.title = title;
     }
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
 }
