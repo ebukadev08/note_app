@@ -1,6 +1,4 @@
-
 package com.ebuka.notesapi.dto.res;
-
 public class ApiRes<T> {
 
     private boolean success;
