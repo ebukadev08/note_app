@@ -5,7 +5,9 @@ import com.ebuka.notesapi.dto.LoginRequest;
 import com.ebuka.notesapi.dto.ResendOtpRequest;
 import com.ebuka.notesapi.dto.SignupRequest;
 import com.ebuka.notesapi.dto.VerifyOtpRequest;
+import com.ebuka.notesapi.dto.res.ApiRes;
 import com.ebuka.notesapi.service.AuthService;
+
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +25,9 @@ public class AuthController {
         this.authService = authService;
     }
 
+    // Signup
     @PostMapping("/signup")
-    public ResponseEntity<Map<String, String>> signup(
+    public ResponseEntity<ApiRes<Void>> signup(
             @Valid @RequestBody SignupRequest request) {
 
         authService.signup(
@@ -33,30 +36,32 @@ public class AuthController {
                 request.getPassword()
         );
 
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(Map.of(
-                        "message",
-                        "Signup received. Check your email for the OTP."
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiRes.success(
+                        "Signup successful. Verify your account to continue.",
+                        null
                 ));
     }
 
+    // Resend OTP
     @PostMapping("/resend-otp")
-    public ResponseEntity<Map<String, String>> resendOtp(
-        @Valid @RequestBody ResendOtpRequest request) {
+    public ResponseEntity<ApiRes<Void>> resendOtp(
+            @Valid @RequestBody ResendOtpRequest request) {
 
         authService.resendOtp(request.getEmail());
 
         return ResponseEntity.ok(
-        Map.of(
-                "message",
-                "If the account is eligible, an OTP request has been processed."
-        )
+                ApiRes.success(
+                        "If the account is eligible, an OTP request has been processed.",
+                        null
+                )
         );
-}
+    }
+
+    // Verify OTP
     @PostMapping("/verify-otp")
-     public ResponseEntity<Map<String, String>> verifyOtp(
-        @Valid @RequestBody VerifyOtpRequest request) {
+    public ResponseEntity<ApiRes<Void>> verifyOtp(
+            @Valid @RequestBody VerifyOtpRequest request) {
 
         authService.verifyOtp(
                 request.getEmail(),
@@ -64,25 +69,28 @@ public class AuthController {
         );
 
         return ResponseEntity.ok(
-                Map.of("message", "Account verified successfully.")
+                ApiRes.success(
+                        "Account verified successfully.",
+                        null
+                )
         );
-        }
+    }
 
+    // Login
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(
-        @Valid @RequestBody LoginRequest request) {
+    public ResponseEntity<ApiRes<Map<String, String>>> login(
+            @Valid @RequestBody LoginRequest request) {
 
-        authService.login(
+        String token = authService.login(
                 request.getEmail(),
                 request.getPassword()
         );
-        String token = authService.login(
-            request.getEmail(),
-            request.getPassword());
 
-        return ResponseEntity.ok(Map.of(
-                "message", "Login successful.",
-                "token", token
-        ));
-        }
+        return ResponseEntity.ok(
+                ApiRes.success(
+                        "Login successful.",
+                        Map.of("token", token)
+                )
+        );
+    }
 }
