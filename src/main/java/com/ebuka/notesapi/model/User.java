@@ -21,6 +21,10 @@ public class User {
     @Column(nullable = false)
     private boolean verified = false;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role = Role.USER;
+
     public User() {
     }
 
@@ -29,6 +33,7 @@ public class User {
         this.email = email;
         this.passwordHash = passwordHash;
         this.verified = false;
+        this.role = Role.USER;
     }
 
     public Long getId() {
@@ -64,5 +69,13 @@ public class User {
 
     public void setVerified(boolean verified) {
         this.verified = verified;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }
