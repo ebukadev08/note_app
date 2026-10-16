@@ -8,6 +8,7 @@ import com.ebuka.notesapi.dto.VerifyOtpRequest;
 import com.ebuka.notesapi.dto.res.ApiRes;
 import com.ebuka.notesapi.service.AuthService;
 
+
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,7 +53,7 @@ public class AuthController {
 
         return ResponseEntity.ok(
                 ApiRes.success(
-                        "If the account is eligible, an OTP request has been processed.",
+                        "OTP sent",
                         null
                 )
         );
