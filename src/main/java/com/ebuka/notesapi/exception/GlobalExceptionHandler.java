@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -36,6 +37,15 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(ApiRes.error(message));
     }
+
+    @ExceptionHandler(ResponseStatusException.class)
+        public ResponseEntity<ApiRes<Void>> handleResponseStatusException(
+                ResponseStatusException exception) {
+
+        return ResponseEntity
+                .status(exception.getStatusCode())
+                .body(ApiRes.error(exception.getReason()));
+        }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiRes<Void>> handleGeneralException(
