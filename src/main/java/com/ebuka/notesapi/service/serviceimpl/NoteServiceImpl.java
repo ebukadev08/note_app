@@ -38,7 +38,7 @@ public class NoteServiceImpl implements NoteService {
         User user = getUserByEmail(email);
 
         if (!user.isVerified()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,
                     "Please verify your account first");
         }
 
