@@ -48,7 +48,7 @@ public class AuthServiceImpl implements AuthService {
 
         if (userRepository.existsByEmail(normalizedEmail)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT,
-                    "An account with this email already exists");
+                    "User already exist");
         }
 
         String passwordHash = passwordEncoder.encode(password);
@@ -131,7 +131,7 @@ public class AuthServiceImpl implements AuthService {
         if (!passwordEncoder.matches(
                 password, user.getPasswordHash())) {
 
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "Invalid email or password");
         }
 
