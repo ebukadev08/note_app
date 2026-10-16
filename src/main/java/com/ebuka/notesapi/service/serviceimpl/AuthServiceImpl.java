@@ -131,7 +131,7 @@ public class AuthServiceImpl implements AuthService {
         if (!passwordEncoder.matches(
                 password, user.getPasswordHash())) {
 
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
                     "Invalid email or password");
         }
 
