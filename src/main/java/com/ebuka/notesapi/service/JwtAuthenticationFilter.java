@@ -2,6 +2,7 @@
 package com.ebuka.notesapi.service;
 
 import com.ebuka.notesapi.dto.res.ApiRes;
+import com.ebuka.notesapi.repository.UserRepository;
 import tools.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.server.ResponseStatusException;
@@ -22,12 +24,15 @@ import java.util.List;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
+    private final UserRepository userRepository;
     private final ObjectMapper objectMapper;
 
     public JwtAuthenticationFilter(
             JwtService jwtService,
+            UserRepository userRepository,
             ObjectMapper objectMapper) {
         this.jwtService = jwtService;
+        this.userRepository = userRepository;
         this.objectMapper = objectMapper;
     }
 
@@ -40,13 +45,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-        // No token: allow Spring Security to decide access.
         if (authHeader == null) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // A supplied Authorization header must use Bearer authentication.
         if (!authHeader.startsWith("Bearer ")) {
             sendUnauthorized(response, "Invalid Authorization header");
             return;
@@ -67,9 +70,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             String email = jwtService.extractEmail(token);
 
-            UsernamePasswordAuthenticationToken authentication =
+            var user = userRepository.findByEmail(email)
+                    .orElse(null);
+
+            if (user == null || !user.isVerified()) {
+                sendUnauthorized(response, "Invalid or unavailable account");
+                return;
+            }
+
+            var authority = new SimpleGrantedAuthority(
+                    "ROLE_" + user.getRole().name()
+            );
+
+            var authentication =
                     new UsernamePasswordAuthenticationToken(
-                            email, null, List.of());
+                            email,
+                            null,
+                            List.of(authority)
+                    );
 
             SecurityContextHolder.getContext()
                     .setAuthentication(authentication);
