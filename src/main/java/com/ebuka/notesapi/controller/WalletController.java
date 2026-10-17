@@ -2,6 +2,7 @@
 package com.ebuka.notesapi.controller;
 
 import com.ebuka.notesapi.dto.req.WalletDepositRequest;
+import com.ebuka.notesapi.dto.req.WalletTransferRequest;
 import com.ebuka.notesapi.dto.res.ApiRes;
 import com.ebuka.notesapi.model.Wallet;
 import com.ebuka.notesapi.service.WalletService;
@@ -68,6 +69,24 @@ public class WalletController {
         return ResponseEntity.ok(
                 ApiRes.success(
                         "Demo deposit successful",
+                        Map.of("balance", newBalance)
+                )
+        );
+    }
+    @PostMapping("/transfer")
+    public ResponseEntity<ApiRes<Map<String, Object>>> transfer(
+        Authentication authentication,
+        @RequestBody WalletTransferRequest request) {
+
+        BigDecimal newBalance = walletService.transfer(
+                authentication.getName(),
+                request.getRecipientEmail(),
+                request.getAmount()
+        );
+
+        return ResponseEntity.ok(
+                ApiRes.success(
+                        "Transfer successful",
                         Map.of("balance", newBalance)
                 )
         );
