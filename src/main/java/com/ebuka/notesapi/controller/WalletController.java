@@ -5,6 +5,7 @@ import com.ebuka.notesapi.dto.req.WalletDepositRequest;
 import com.ebuka.notesapi.dto.req.WalletTransferRequest;
 import com.ebuka.notesapi.dto.res.ApiRes;
 import com.ebuka.notesapi.model.Wallet;
+import com.ebuka.notesapi.model.WalletTransaction;
 import com.ebuka.notesapi.service.WalletService;
 
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -91,4 +93,19 @@ public class WalletController {
                 )
         );
     }
+
+    @GetMapping("/transactions")
+    public ResponseEntity<ApiRes<List<WalletTransaction>>> getMyTransactions(
+        Authentication authentication) {
+
+        List<WalletTransaction> transactions =
+                walletService.getMyTransactions(authentication.getName());
+
+        return ResponseEntity.ok(
+                ApiRes.success(
+                        "Transaction history retrieved successfully",
+                        transactions
+                )
+        );
+        }
 }
