@@ -1,0 +1,56 @@
+
+package com.ebuka.notesapi.controller;
+
+import com.ebuka.notesapi.dto.res.ApiRes;
+import com.ebuka.notesapi.model.Wallet;
+import com.ebuka.notesapi.service.WalletService;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
+import java.util.Map;
+
+@RestController
+@RequestMapping("/api/wallet")
+public class WalletController {
+
+    private final WalletService walletService;
+
+    public WalletController(WalletService walletService) {
+        this.walletService = walletService;
+    }
+
+    @PostMapping
+    public ResponseEntity<ApiRes<Map<String, Object>>> createWallet(
+            Authentication authentication) {
+
+        Wallet wallet = walletService.createWallet(
+                authentication.getName());
+
+        Map<String, Object> data = Map.of(
+                "id", wallet.getId(),
+                "balance", wallet.getBalance(),
+                "createdAt", wallet.getCreatedAt()
+        );
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiRes.success(
+                        "Wallet created successfully", data));
+    }
+
+    @GetMapping("/balance")
+    public ResponseEntity<ApiRes<Map<String, Object>>> getMyBalance(
+            Authentication authentication) {
+
+        BigDecimal balance = walletService.getMyBalance(
+                authentication.getName());
+
+        return ResponseEntity.ok(ApiRes.success(
+                "Wallet balance retrieved successfully",
+                Map.of("balance", balance)
+        ));
+    }
+}
