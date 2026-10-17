@@ -48,7 +48,7 @@ public class SecurityConfig {
 
                     objectMapper.writeValue(
                         response.getOutputStream(),
-                        com.ebuka.notesapi.dto.res.ApiRes.error("Unauthorized")
+                        com.ebuka.notesapi.dto.res.ApiRes.error("Token required")
                     );
                 })
                 .accessDeniedHandler((request, response, accessDeniedException) -> {
@@ -68,7 +68,7 @@ public class SecurityConfig {
                 .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                // .requestMatchers("/api/wallet/**").hasRole("USER")
+                .requestMatchers("/api/wallet/**").hasRole("USER")
                 .anyRequest().authenticated()
             )
 
