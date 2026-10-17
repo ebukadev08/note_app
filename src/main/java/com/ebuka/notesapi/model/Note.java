@@ -17,9 +17,10 @@ public class Note {
     private Long id;
     
     @NotBlank (message = "Title is required")
-    @Size(max = 100, message = "Title must not exceed 100 characters")
+    @Size(max = 100, min = 1, message = "Title must not exceed 100 characters")
     private String title;
-
+    
+    @Size(max = 1000, message = "Title must not exceed 1000 characters")
     @NotBlank(message = "Content is required")
     private String content;
 
