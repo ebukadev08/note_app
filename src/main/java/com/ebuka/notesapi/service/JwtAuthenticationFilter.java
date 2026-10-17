@@ -57,11 +57,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String token = authHeader.substring(7);
 
-        if (token.isBlank()) {
-            sendUnauthorized(response, "Token is required");
-            return;
-        }
-
         try {
             if (!jwtService.isTokenValid(token)) {
                 sendUnauthorized(response, "Invalid or expired token");
