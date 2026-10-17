@@ -88,5 +88,77 @@ public class WalletServiceImpl implements WalletService {
         walletRepository.save(wallet);
 
         return newBalance;
-}
+    }
+
+    @Override
+    @Transactional
+    public BigDecimal transfer(
+            String senderEmail,
+            String recipientEmail,
+            BigDecimal amount) {
+
+        // 1. Validate the amount
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Transfer amount must be greater than zero"
+            );
+        }
+
+        // 2. Prevent transferring to yourself
+        if (senderEmail.equalsIgnoreCase(recipientEmail)) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "You cannot transfer money to yourself"
+            );
+        }
+
+        // 3. Find the sender
+        User sender = userRepository.findByEmail(senderEmail)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Sender not found"
+                ));
+
+        // 4. Find the recipient
+        User recipient = userRepository.findByEmail(recipientEmail)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Recipient not found"
+                ));
+
+        // 5. Find both wallets
+        Wallet senderWallet = walletRepository.findByUser(sender)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Sender wallet not found"
+                ));
+
+        Wallet recipientWallet = walletRepository.findByUser(recipient)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Recipient wallet not found"
+                ));
+
+        // 6. Check the sender's balance
+        if (senderWallet.getBalance().compareTo(amount) < 0) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Insufficient wallet balance"
+            );
+        }
+
+        // 7. Calculate the new balances
+        BigDecimal senderBalance =
+                senderWallet.getBalance().subtract(amount);
+
+        BigDecimal recipientBalance =
+                recipientWallet.getBalance().add(amount);
+
+        // 8. Update both wallets
+        senderWallet.setBalance(senderBalance);
+        recipientWallet.setBalance(recipientBalance);
+
+        walletRepository.save(senderWallet);
+        walletRepository.save(recipientWallet);
+
+        // 9. Return the sender's new balance
+        return senderBalance;
+    }
 }
