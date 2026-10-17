@@ -1,7 +1,7 @@
 
 package com.ebuka.notesapi.controller;
 
-import com.ebuka.notesapi.dto.WalletDepositRequest;
+import com.ebuka.notesapi.dto.req.WalletDepositRequest;
 import com.ebuka.notesapi.dto.res.ApiRes;
 import com.ebuka.notesapi.model.Wallet;
 import com.ebuka.notesapi.service.WalletService;
