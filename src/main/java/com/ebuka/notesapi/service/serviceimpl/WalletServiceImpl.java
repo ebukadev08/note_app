@@ -1,10 +1,13 @@
 
 package com.ebuka.notesapi.service.serviceimpl;
 
+import com.ebuka.notesapi.model.TransactionType;
 import com.ebuka.notesapi.model.User;
 import com.ebuka.notesapi.model.Wallet;
+import com.ebuka.notesapi.model.WalletTransaction;
 import com.ebuka.notesapi.repository.UserRepository;
 import com.ebuka.notesapi.repository.WalletRepository;
+import com.ebuka.notesapi.repository.WalletTransactionRepository;
 import com.ebuka.notesapi.service.WalletService;
 
 import org.springframework.http.HttpStatus;
@@ -13,18 +16,22 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 public class WalletServiceImpl implements WalletService {
 
+    private final WalletTransactionRepository transactionRepository;
     private final UserRepository userRepository;
     private final WalletRepository walletRepository;
 
     public WalletServiceImpl(
             UserRepository userRepository,
-            WalletRepository walletRepository) {
+            WalletRepository walletRepository, 
+            WalletTransactionRepository transactionRepository) {
         this.userRepository = userRepository;
         this.walletRepository = walletRepository;
+        this.transactionRepository = transactionRepository;
     }
 
     @Override
@@ -86,6 +93,14 @@ public class WalletServiceImpl implements WalletService {
 
         wallet.setBalance(newBalance);
         walletRepository.save(wallet);
+
+        WalletTransaction transaction = new WalletTransaction(
+        wallet,
+        TransactionType.DEPOSIT,
+        amount
+        );
+
+        transactionRepository.save(transaction);
 
         return newBalance;
     }
@@ -158,7 +173,44 @@ public class WalletServiceImpl implements WalletService {
         walletRepository.save(senderWallet);
         walletRepository.save(recipientWallet);
 
+        WalletTransaction senderTransaction = new WalletTransaction(
+                senderWallet,
+                TransactionType.TRANSFER,
+                amount
+        );
+
+        transactionRepository.save(senderTransaction);
+
+        // Record the recipient's transaction
+        WalletTransaction recipientTransaction = new WalletTransaction(
+                recipientWallet,
+                TransactionType.TRANSFER,
+                amount
+        );
+
+        transactionRepository.save(recipientTransaction);
+
         // 9. Return the sender's new balance
         return senderBalance;
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<WalletTransaction> getMyTransactions(String email) {
+
+        User user = userRepository.findByEmail(email)
+        .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND,
+                "User not found"
+        ));
+
+        Wallet wallet = walletRepository.findByUser(user)
+        .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND,
+                "Wallet not found"
+        ));
+
+        return transactionRepository
+        .findByWalletOrderByCreatedAtDesc(wallet);
+        }
 }
