@@ -1,10 +1,10 @@
 
 package com.ebuka.notesapi.controller;
 
-import com.ebuka.notesapi.dto.LoginRequest;
-import com.ebuka.notesapi.dto.ResendOtpRequest;
-import com.ebuka.notesapi.dto.SignupRequest;
-import com.ebuka.notesapi.dto.VerifyOtpRequest;
+import com.ebuka.notesapi.dto.req.LoginRequest;
+import com.ebuka.notesapi.dto.req.ResendOtpRequest;
+import com.ebuka.notesapi.dto.req.SignupRequest;
+import com.ebuka.notesapi.dto.req.VerifyOtpRequest;
 import com.ebuka.notesapi.dto.res.ApiRes;
 import com.ebuka.notesapi.service.AuthService;
 
