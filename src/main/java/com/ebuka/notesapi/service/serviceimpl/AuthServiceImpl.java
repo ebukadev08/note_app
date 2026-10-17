@@ -120,7 +120,7 @@ public class AuthServiceImpl implements AuthService {
 
         User user = userRepository.findByEmail(normalizedEmail)
                 .orElseThrow(() ->
-                        new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        new ResponseStatusException(HttpStatus.UNAUTHORIZED,
                                 "Invalid email or password"));
 
         if (!user.isVerified()) {
