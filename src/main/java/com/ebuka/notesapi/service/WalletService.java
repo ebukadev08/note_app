@@ -10,4 +10,6 @@ public interface WalletService {
     Wallet createWallet(String email);
 
     BigDecimal getMyBalance(String email);
+
+    BigDecimal deposit(String email, BigDecimal amount);
 }
