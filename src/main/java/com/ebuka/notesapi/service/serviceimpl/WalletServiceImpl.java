@@ -1,6 +1,7 @@
 
 package com.ebuka.notesapi.service.serviceimpl;
 
+import com.ebuka.notesapi.dto.res.WalletTransactionResponse;
 import com.ebuka.notesapi.model.TransactionType;
 import com.ebuka.notesapi.model.User;
 import com.ebuka.notesapi.model.Wallet;
@@ -196,21 +197,29 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<WalletTransaction> getMyTransactions(String email) {
+    public List<WalletTransactionResponse> getMyTransactions(String email) {
 
         User user = userRepository.findByEmail(email)
-        .orElseThrow(() -> new ResponseStatusException(
-                HttpStatus.NOT_FOUND,
-                "User not found"
-        ));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "User not found"
+                ));
 
         Wallet wallet = walletRepository.findByUser(user)
-        .orElseThrow(() -> new ResponseStatusException(
-                HttpStatus.NOT_FOUND,
-                "Wallet not found"
-        ));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Wallet not found"
+                ));
 
         return transactionRepository
-        .findByWalletOrderByCreatedAtDesc(wallet);
+                .findByWalletOrderByCreatedAtDesc(wallet)
+                .stream()
+                .map(transaction -> new WalletTransactionResponse(
+                        transaction.getId(),
+                        transaction.getType(),
+                        transaction.getAmount(),
+                        transaction.getCreatedAt()
+                ))
+                .toList();
         }
 }
