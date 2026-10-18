@@ -4,8 +4,8 @@ package com.ebuka.notesapi.controller;
 import com.ebuka.notesapi.dto.req.WalletDepositRequest;
 import com.ebuka.notesapi.dto.req.WalletTransferRequest;
 import com.ebuka.notesapi.dto.res.ApiRes;
+import com.ebuka.notesapi.dto.res.WalletTransactionResponse;
 import com.ebuka.notesapi.model.Wallet;
-import com.ebuka.notesapi.model.WalletTransaction;
 import com.ebuka.notesapi.service.WalletService;
 
 import org.springframework.http.HttpStatus;
@@ -95,10 +95,10 @@ public class WalletController {
     }
 
     @GetMapping("/transactions")
-    public ResponseEntity<ApiRes<List<WalletTransaction>>> getMyTransactions(
+    public ResponseEntity<ApiRes<List<WalletTransactionResponse>>> getMyTransactions(
         Authentication authentication) {
 
-        List<WalletTransaction> transactions =
+        List<WalletTransactionResponse> transactions =
                 walletService.getMyTransactions(authentication.getName());
 
         return ResponseEntity.ok(
