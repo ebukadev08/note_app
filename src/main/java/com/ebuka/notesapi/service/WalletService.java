@@ -1,8 +1,8 @@
 
 package com.ebuka.notesapi.service;
 
+import com.ebuka.notesapi.dto.res.WalletTransactionResponse;
 import com.ebuka.notesapi.model.Wallet;
-import com.ebuka.notesapi.model.WalletTransaction;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -20,5 +20,5 @@ public interface WalletService {
             String recipientEmail,
             BigDecimal amount
     );
-    List<WalletTransaction> getMyTransactions(String email);
+    List<WalletTransactionResponse> getMyTransactions(String email);
 }
