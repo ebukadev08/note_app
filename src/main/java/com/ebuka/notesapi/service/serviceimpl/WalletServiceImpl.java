@@ -176,7 +176,7 @@ public class WalletServiceImpl implements WalletService {
 
         WalletTransaction senderTransaction = new WalletTransaction(
                 senderWallet,
-                TransactionType.TRANSFER,
+                TransactionType.TRANSFER_OUT,
                 amount
         );
 
@@ -185,7 +185,7 @@ public class WalletServiceImpl implements WalletService {
         // Record the recipient's transaction
         WalletTransaction recipientTransaction = new WalletTransaction(
                 recipientWallet,
-                TransactionType.TRANSFER,
+                TransactionType.TRANSFER_IN,
                 amount
         );
 
