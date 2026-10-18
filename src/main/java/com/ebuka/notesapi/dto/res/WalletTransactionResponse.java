@@ -38,4 +38,14 @@ public class WalletTransactionResponse {
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
+
+    public String getDescription() {
+    return switch (type) {
+        case DEPOSIT -> "Deposit";
+        case TRANSFER_OUT -> "Transfer sent";
+        case TRANSFER_IN -> "Money received";
+        case TRANSFER ->
+                "Older transfer (direction unavailable)";
+    };
+}
 }
