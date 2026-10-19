@@ -1,5 +1,6 @@
 package com.ebuka.notesapi.service.serviceimpl;
 
+import com.ebuka.notesapi.dto.req.UpdateProfileRequest;
 import com.ebuka.notesapi.dto.res.UserResponse;
 import com.ebuka.notesapi.model.User;
 import com.ebuka.notesapi.repository.UserRepository;
@@ -43,4 +44,36 @@ public class UserServiceImpl implements UserService {
                 foundUser.getRole()
         );
     }
+
+@Override
+@Transactional
+public UserResponse updateMyProfile(
+        String email,
+        UpdateProfileRequest request) {
+
+    User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "User not found"
+            ));
+
+    if (request.getName() == null || request.getName().isBlank()) {
+        throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST,
+                "Name cannot be blank"
+        );
+    }
+
+    user.setName(request.getName().trim());
+
+    User savedUser = userRepository.save(user);
+
+    return new UserResponse(
+            savedUser.getId(),
+            savedUser.getName(),
+            savedUser.getEmail(),
+            savedUser.isVerified(),
+            savedUser.getRole()
+    );
+}
 }
