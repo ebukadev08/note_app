@@ -9,5 +9,4 @@ public interface AuthService {
     void verifyOtp(String email, String otp);
 
     String login(String email, String password);
-    
 }
