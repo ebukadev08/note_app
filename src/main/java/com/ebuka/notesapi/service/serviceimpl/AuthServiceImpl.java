@@ -47,7 +47,7 @@ public class AuthServiceImpl implements AuthService {
         String normalizedName = name.trim();
 
         if (userRepository.existsByEmail(normalizedEmail)) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT,
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "User already exist");
         }
 
