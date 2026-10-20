@@ -2,7 +2,7 @@
 package com.ebuka.notesapi.service.serviceimpl;
 
 import com.ebuka.notesapi.dto.res.WalletTransactionResponse;
-import com.ebuka.notesapi.model.TransactionType;
+import com.ebuka.notesapi.enums.TransactionType;
 import com.ebuka.notesapi.model.User;
 import com.ebuka.notesapi.model.Wallet;
 import com.ebuka.notesapi.model.WalletTransaction;

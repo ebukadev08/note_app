@@ -1,4 +1,4 @@
-package com.ebuka.notesapi.model;
+package com.ebuka.notesapi.enums;
 
 public enum Role {
     USER,

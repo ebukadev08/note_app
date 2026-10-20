@@ -1,6 +1,7 @@
 package com.ebuka.notesapi.dto.res;
 import com.ebuka.notesapi.model.User;
 
+
 public class AdminUserResponse {
 
     private Long id;

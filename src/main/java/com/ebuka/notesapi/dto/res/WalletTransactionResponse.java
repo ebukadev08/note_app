@@ -1,6 +1,6 @@
 package com.ebuka.notesapi.dto.res;
 
-import com.ebuka.notesapi.model.TransactionType;
+import com.ebuka.notesapi.enums.TransactionType;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -48,4 +48,19 @@ public class WalletTransactionResponse {
                 "Older transfer (direction unavailable)";
     };
 }
+
+    // public String getDescription(){
+    //     if (type == TransactionType.DEPOSIT) {
+    //         return "Deposit";
+    //     } else if (type == TransactionType.TRANSFER_OUT) {
+    //         return "Transfer sent";
+    //     } else if (type == TransactionType.TRANSFER_IN) {
+    //         return "Money received";
+    //     } else if (type == TransactionType.TRANSFER) {
+    //         return "Older transfer (direction unavailable)";
+    //     } else {
+    //         return "Unknown transaction type";
+    //     }
+    // } 
+    
 }
