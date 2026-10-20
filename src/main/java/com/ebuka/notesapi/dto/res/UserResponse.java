@@ -1,6 +1,6 @@
 package com.ebuka.notesapi.dto.res;
 
-import com.ebuka.notesapi.model.Role;
+import com.ebuka.notesapi.enums.Role;
 
 public class UserResponse {
 

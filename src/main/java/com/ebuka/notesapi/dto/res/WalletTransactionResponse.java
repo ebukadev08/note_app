@@ -1,6 +1,6 @@
 package com.ebuka.notesapi.dto.res;
 
-import com.ebuka.notesapi.model.TransactionType;
+import com.ebuka.notesapi.enums.TransactionType;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 

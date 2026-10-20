@@ -1,5 +1,6 @@
 package com.ebuka.notesapi.model;
 
+import com.ebuka.notesapi.enums.TransactionType;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

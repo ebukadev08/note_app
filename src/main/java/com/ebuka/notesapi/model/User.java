@@ -1,4 +1,5 @@
 package com.ebuka.notesapi.model;
+import com.ebuka.notesapi.enums.Role;
 import jakarta.persistence.*;
 
 @Entity
