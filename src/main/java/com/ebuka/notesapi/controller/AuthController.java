@@ -8,7 +8,6 @@ import com.ebuka.notesapi.dto.req.VerifyOtpRequest;
 import com.ebuka.notesapi.dto.res.ApiRes;
 import com.ebuka.notesapi.service.AuthService;
 
-
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,9 +31,7 @@ public class AuthController {
             @Valid @RequestBody SignupRequest request) {
 
         authService.signup(
-                request.getName(),
-                request.getEmail(),
-                request.getPassword()
+                request
         );
 
         return ResponseEntity.status(HttpStatus.CREATED)
