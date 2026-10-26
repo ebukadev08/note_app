@@ -11,7 +11,10 @@ public class User {
     private Long id;
 
     @Column(nullable = false)
-    private String name;
+    private String firstName;
+
+    @Column(nullable = false)
+    private String lastName;
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -29,9 +32,11 @@ public class User {
     public User() {
     }
 
-    public User(String name, String email, String passwordHash) {
-        this.name = name;
+    public User(String firstName, String lastName, String email, Role role, String passwordHash) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
+        this.role = role;
         this.passwordHash = passwordHash;
         this.verified = false;
         this.role = Role.USER;
@@ -40,12 +45,20 @@ public class User {
     public Long getId() {
         return id;
     }
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getEmail() {
