@@ -1,8 +1,10 @@
 package com.ebuka.notesapi.service;
 
+import com.ebuka.notesapi.dto.req.SignupRequest;
+
 public interface AuthService {
 
-    void signup(String name, String email, String password);
+    void signup(SignupRequest request);
     
     void resendOtp(String email);
 
