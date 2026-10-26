@@ -38,7 +38,8 @@ public class UserServiceImpl implements UserService {
 
         return new UserResponse(
                 foundUser.getId(),
-                foundUser.getName(),
+                foundUser.getFirstName(),
+                foundUser.getLastName(),
                 foundUser.getEmail(),
                 foundUser.isVerified(),
                 foundUser.getRole()
@@ -57,20 +58,22 @@ public UserResponse updateMyProfile(
                     "User not found"
             ));
 
-    if (request.getName() == null || request.getName().isBlank()) {
+    if (request.getFirstName() == null || request.getFirstName().isBlank()) {
         throw new ResponseStatusException(
                 HttpStatus.BAD_REQUEST,
                 "Name cannot be blank"
         );
     }
 
-    user.setName(request.getName().trim());
+    user.setFirstName(request.getFirstName().trim());
+    user.setLastName(request.getLastName().trim());
 
     User savedUser = userRepository.save(user);
 
     return new UserResponse(
             savedUser.getId(),
-            savedUser.getName(),
+            savedUser.getFirstName(),
+            savedUser.getLastName(),
             savedUser.getEmail(),
             savedUser.isVerified(),
             savedUser.getRole()
