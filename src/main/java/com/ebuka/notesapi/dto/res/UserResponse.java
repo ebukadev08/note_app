@@ -5,20 +5,23 @@ import com.ebuka.notesapi.enums.Role;
 public class UserResponse {
 
     private Long id;
-    private String name;
+    private String firstName;
+    private String lastName;
     private String email;
     private boolean verified;
     private Role role;
 
     public UserResponse(
             Long id,
-            String name,
+            String firstName,
+            String lastName,
             String email,
             boolean verified,
             Role role) {
 
         this.id = id;
-        this.name = name;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.verified = verified;
         this.role = role;
@@ -27,9 +30,13 @@ public class UserResponse {
     public Long getId() {
         return id;
     }
+    
+     public String getFirstName() {
+        return firstName;
+    }
 
-    public String getName() {
-        return name;
+    public String getLastName() {
+        return lastName;
     }
 
     public String getEmail() {
