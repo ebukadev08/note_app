@@ -67,9 +67,8 @@ public class OtpService {
             );
         }
 
-        int attempts = data.attempts.incrementAndGet();
-
         if (!passwordEncoder.matches(otp, data.otpHash)) {
+            int attempts = data.attempts.incrementAndGet();
             if (attempts >= MAX_ATTEMPTS) {
                 otpStorage.remove(email, data);
 
